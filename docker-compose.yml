@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  osmo-bsc:
+    build:
+      context: ./osmo-bsc
+      dockerfile: Dockerfile
+    container_name: osmo-bsc
+    volumes:
+      - ../config/osmo-bsc/etc/osmocom:/etc/osmocom/
+    networks:
+      - osmocom-net
+
+  # osmo-bts:
+  #   build:
+  #     context: ./osmo-bts
+  #     dockerfile: Dockerfile
+  #   container_name: osmo-bts
+  #   volumes:
+  #     - ../config/osmo-bts/etc/osmocom:/etc/osmocom/
+  #   networks:
+  #     - osmocom-net
+
+networks:
+  osmocom-net:
+    driver: bridge
