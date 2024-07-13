@@ -1,33 +1,16 @@
 FROM debian:stable-slim
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    autoconf \
-    automake \
-    libtool \
-    pkg-config \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y extrepo
 
-# Copy the build script
-COPY build.sh /build.sh
-RUN chmod +x /build.sh
+# Install osmocom packages
+RUN extrepo enable osmocom-latest
+RUN apt update
+RUN apt install -y osmo-bts
 
-RUN autoupdate --force
+# Cleanup
+RUN apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 
-# Run the build script
-RUN /build.sh
-
-# Expose necessary ports
-EXPOSE 1984 3002 3003 4238 4241 
-
-# Copy the start script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-CMD [ "/start.sh" ]
-
-# Command to run osmo-bts
-# CMD ["osmo-bts", "-c", "/etc/osmocom/osmo-bts.cfg"]
+# Command to run osmo-bsc
+CMD ["osmo-bts", "-c", "/etc/osmocom/osmo-bts.cfg"]
