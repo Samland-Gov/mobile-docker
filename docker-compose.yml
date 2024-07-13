@@ -6,8 +6,8 @@ services:
       context: ./osmo-bsc
       dockerfile: Dockerfile
     container_name: osmo-bsc
-    volumes:
-      - ./config/osmo-bsc:/etc/osmocom
+    # volumes:
+    #   - ./config/osmo-bsc:/etc/osmocom
     networks:
       - osmocom-net
 
@@ -16,10 +16,12 @@ services:
       context: ./osmo-bts
       dockerfile: Dockerfile
     container_name: osmo-bts
-    volumes:
-      - ./config/osmo-bts:/etc/osmocom
+    # volumes:
+    #   - ./config/osmo-bts:/etc/osmocom
     networks:
       - osmocom-net
+    depends_on:
+      - osmo-bsc
 
 networks:
   osmocom-net:

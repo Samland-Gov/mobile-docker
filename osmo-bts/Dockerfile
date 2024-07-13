@@ -13,4 +13,5 @@ RUN apt-get clean \
 && rm -rf /var/lib/apt/lists/*
 
 # Command to run osmo-bsc
-CMD ["osmo-bts-virtual", "-c", "/etc/osmocom/osmo-bts.cfg"]
+CMD ["osmo-bts-virtual"]
+#, "-c", "/etc/osmocom/osmo-bts.cfg"]

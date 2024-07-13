@@ -13,4 +13,5 @@ RUN apt-get clean \
 && rm -rf /var/lib/apt/lists/*
 
 # Command to run osmo-bsc
-CMD ["osmo-bsc", "-c", "/etc/osmocom/osmo-bsc.cfg"]
+CMD ["osmo-bsc"]
+#, "-c", "/etc/osmocom/osmo-bsc.cfg"]
