@@ -31,7 +31,7 @@ RUN cp -rn /etc/osmocom/* /data
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose ports
-EXPOSE 4242 4241
+EXPOSE 4242 4241 3003 3002
 
 # Start init script
 CMD ["/init.sh"]

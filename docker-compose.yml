@@ -12,7 +12,9 @@ services:
       - osmocom-net
     ports:
       - "4242:4242"
-      - "4242:4242"
+      - "4241:4241"
+      - "3003:3003"
+      - "3002:3002"
 
 networks:
   osmocom-net:
