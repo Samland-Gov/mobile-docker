@@ -43,5 +43,5 @@ docker compose --env-file=.env up -d
 
 ```bash
 # Example using the docker-compose (v1)
-docker-compose -f --env-file=.env up -d
+docker-compose --env-file=.env up -d
 ```
