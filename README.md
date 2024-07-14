@@ -1,2 +1,3 @@
-# osmocom-docker
-Dockerfiles for created an osmocom based mobile network
+# mobile-docker
+
+Dockerfiles for creating a Samland mobile network
