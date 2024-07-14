@@ -8,8 +8,8 @@ services:
         aliases:
           - db.samcom
     volumes:
-      - db_data:/data/db
-      - db_config:/data/configdb
+      - ../mobile-data/db/data:/data/db
+      - ../mobile-data/db/config:/data/configdb
     ports:
       - "0.0.0.0:27017:27017/tcp"
 
@@ -245,16 +245,6 @@ networks:
     ipam:
       config:
         - subnet: 10.33.33.0/24
-
-volumes:
-  db_data:
-    name: open5gs_db_data
-    labels:
-      mongodb_version: ${MONGODB_VERSION}
-  db_config:
-    name: open5gs_db_config
-    labels:
-      mongodb_version: ${MONGODB_VERSION}
 
 configs:
   nrf_config:
