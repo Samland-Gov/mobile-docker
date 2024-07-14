@@ -1,0 +1,19 @@
+logger:
+  file:
+    path: /var/log/open5gs/nssf.log
+
+global:
+
+nssf:
+  sbi:
+    server:
+      - address: nssf.samcom
+        port: 80
+    client:
+      nrf:
+        - uri: http://nrf.samcom:80
+      nsi:
+        - uri: http://nrf.samcom:80
+          s_nssai:
+            sst: 1
+            sd: 1

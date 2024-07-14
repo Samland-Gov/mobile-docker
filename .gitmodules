@@ -1,0 +1,3 @@
+[submodule "third_party/docker-open5gs"]
+	path = third_party/docker-open5gs
+	url = https://github.com/Samland-Gov/docker-open5gs.git

@@ -1,0 +1,30 @@
+logger:
+  file:
+    path: /var/log/open5gs/smf.log
+
+global:
+
+smf:
+  sbi:
+    server:
+      - address: smf.samcom
+        port: 80
+    client:
+      nrf:
+        - uri: http://nrf.samcom:80
+  pfcp:
+    server:
+      - address: smf.samcom
+    client:
+      upf:
+        - address: upf.samcom
+  gtpu:
+    server:
+      - address: smf.samcom
+  session:
+    - subnet: 10.45.0.0/16
+      gateway: 10.45.0.1
+  dns:
+    - 8.8.8.8
+    - 8.8.4.4
+  mtu: 1400
