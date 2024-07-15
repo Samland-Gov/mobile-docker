@@ -1,279 +1,288 @@
+version: "3.8"
+
 services:
-  db:
-    container_name: db
-    image: "mongo:${MONGODB_VERSION}"
-    command: "mongod --bind_ip 0.0.0.0 --port 27017"
-    networks:
-      open5gs:
-        aliases:
-          - db.samcom
-    volumes:
-      - db_data:/data/db
-      - db_config:/data/configdb
-    ports:
-      - "0.0.0.0:27017:27017/tcp"
-
-  nrf:
-    container_name: nrf
-    image: "nrf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/nrf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/nrf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - nrf.samcom
-    configs:
-      - source: nrf_config
-        target: /etc/open5gs/custom/nrf.yaml
-
-  ausf:
-    container_name: ausf
-    image: "ausf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/ausf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/ausf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - ausf.samcom
-    configs:
-      - source: ausf_config
-        target: /etc/open5gs/custom/ausf.yaml
-    depends_on:
-      - nrf
-
-  udm:
-    container_name: udm
-    image: "udm:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/udm
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/udm.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - udm.samcom
-    configs:
-      - source: udm_config
-        target: /etc/open5gs/custom/udm.yaml
-    depends_on:
-      - nrf
-
-  udr:
-    container_name: udr
-    image: "udr:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/udr
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/udr.yaml"
-    restart: unless-stopped
-    networks:
-      open5gs:
-        aliases:
-          - udr.samcom
-    configs:
-      - source: udr_config
-        target: /etc/open5gs/custom/udr.yaml
-    depends_on:
-      - db
-      - nrf
-
-  nssf:
-    container_name: nssf
-    image: "nssf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/nssf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/nssf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - nssf.samcom
-    configs:
-      - source: nssf_config
-        target: /etc/open5gs/custom/nssf.yaml
-    depends_on:
-      - nrf
-
-  bsf:
-    container_name: bsf
-    image: "bsf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/bsf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /open5gs/config/bsf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - bsf.samcom
-    configs:
-      - source: bsf_config
-        target: /open5gs/config/bsf.yaml
-    depends_on:
-      - nrf
-
-  pcf:
-    container_name: pcf
-    image: "pcf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/pcf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/pcf.yaml"
-    restart: unless-stopped
-    networks:
-      open5gs:
-        aliases:
-          - pcf.samcom
-    configs:
-      - source: pcf_config
-        target: /etc/open5gs/custom/pcf.yaml
-    depends_on:
-      - db
-      - nrf
-
-  amf:
-    container_name: amf
-    image: "amf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/amf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/amf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - amf.samcom
-    configs:
-      - source: amf_config
-        target: /etc/open5gs/custom/amf.yaml
-    depends_on:
-      - nrf
-    ports:
-      - "0.0.0.0:38412:38412/sctp"
-
-  smf:
-    container_name: smf
-    image: "smf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/smf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/smf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - smf.samcom
-    configs:
-      - source: smf_config
-        target: /etc/open5gs/custom/smf.yaml
-    depends_on:
-      - nrf
-      - upf
-
-  upf:
+  free5gc-upf:
     container_name: upf
-    image: "upf:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/images/upf
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - UBUNTU_VERSION=${UBUNTU_VERSION}
-    command: "-c /etc/open5gs/custom/upf.yaml"
-    networks:
-      open5gs:
-        aliases:
-          - upf.samcom
-    extra_hosts:
-      docker-host.external-ip: ${DOCKER_HOST_IP}
-    configs:
-      - source: upf_config
-        target: /etc/open5gs/custom/upf.yaml
-    ports:
-      - "0.0.0.0:2152:2152/udp"
-    privileged: true
+    image: free5gc/upf:v3.4.2
+    command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
+    volumes:
+      - ./config/upfcfg.yaml:/free5gc/config/upfcfg.yaml
+      - ./config/upf-iptables.sh:/free5gc/upf-iptables.sh
     cap_add:
       - NET_ADMIN
-
-  webui:
-    container_name: webui
-    image: "webui:${OPEN5GS_VERSION}"
-    build:
-      context: ./third_party/docker-open5gs/webui
-      args:
-        - OPEN5GS_VERSION=${OPEN5GS_VERSION}
-        - NODE_VERSION=${NODE_VERSION}
-    environment:
-      - DB_URI=mongodb://db.samcom/open5gs
-      - PORT=9999
-      - HOSTNAME=0.0.0.0
-      - NODE_ENV=dev
-    command: "run dev"
     networks:
-      open5gs:
+      privnet:
         aliases:
-          - webui.samcom
+          - upf.samcom
+
+  db:
+    container_name: mongodb
+    image: mongo
+    command: mongod --port 27017
+    expose:
+      - "27017"
+    volumes:
+      - ./dbdata:/data/db
+    networks:
+      privnet:
+        aliases:
+          - db
+
+  free5gc-nrf:
+    container_name: nrf
+    image: free5gc/nrf:v3.4.2
+    command: ./nrf -c ./config/nrfcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/nrfcfg.yaml:/free5gc/config/nrfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      DB_URI: mongodb://db/free5gc
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - nrf.samcom
     depends_on:
       - db
+
+  free5gc-amf:
+    container_name: amf
+    image: free5gc/amf:v3.4.2
+    command: ./amf -c ./config/amfcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/amfcfg.yaml:/free5gc/config/amfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - amf.samcom
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-ausf:
+    container_name: ausf
+    image: free5gc/ausf:v3.4.2
+    command: ./ausf -c ./config/ausfcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/ausfcfg.yaml:/free5gc/config/ausfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - ausf.samcom
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-nssf:
+    container_name: nssf
+    image: free5gc/nssf:v3.4.2
+    command: ./nssf -c ./config/nssfcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/nssfcfg.yaml:/free5gc/config/nssfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - nssf.samcom
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-pcf:
+    container_name: pcf
+    image: free5gc/pcf:v3.4.2
+    command: ./pcf -c ./config/pcfcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/pcfcfg.yaml:/free5gc/config/pcfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - pcf.samcom
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-smf:
+    container_name: smf
+    image: free5gc/smf:v3.4.2
+    command: ./smf -c ./config/smfcfg.yaml -u ./config/uerouting.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/smfcfg.yaml:/free5gc/config/smfcfg.yaml
+      - ./config/uerouting.yaml:/free5gc/config/uerouting.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - smf.samcom
+    depends_on:
+      - free5gc-nrf
+      - free5gc-upf
+
+  free5gc-udm:
+    container_name: udm
+    image: free5gc/udm:v3.4.2
+    command: ./udm -c ./config/udmcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/udmcfg.yaml:/free5gc/config/udmcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - udm.samcom
+    depends_on:
+      - db
+      - free5gc-nrf
+
+  free5gc-udr:
+    container_name: udr
+    image: free5gc/udr:v3.4.2
+    command: ./udr -c ./config/udrcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/udrcfg.yaml:/free5gc/config/udrcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      DB_URI: mongodb://db/free5gc
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - udr.samcom
+    depends_on:
+      - db
+      - free5gc-nrf
+
+  free5gc-chf:
+    container_name: chf
+    image: free5gc/chf:v3.4.2
+    command: ./chf -c ./config/chfcfg.yaml
+    expose:
+      - "8000"
+    volumes:
+      - ./config/chfcfg.yaml:/free5gc/config/chfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      DB_URI: mongodb://db/free5gc
+      GIN_MODE: release
+    networks:
+      privnet:
+        aliases:
+          - chf.samcom
+    depends_on:
+      - db
+      - free5gc-nrf
+      - free5gc-webui
+
+  free5gc-n3iwf:
+    container_name: n3iwf
+    image: free5gc/n3iwf:v3.4.2
+    command: sh -c "./n3iwf-ipsec.sh && ./n3iwf -c ./config/n3iwfcfg.yaml"
+    volumes:
+      - ./config/n3iwfcfg.yaml:/free5gc/config/n3iwfcfg.yaml
+      - ./config/n3iwf-ipsec.sh:/free5gc/n3iwf-ipsec.sh
+    environment:
+      GIN_MODE: release
+    cap_add:
+      - NET_ADMIN
+    networks:
+      privnet:
+        ipv4_address: 10.100.200.15
+        aliases:
+          - n3iwf.samcom
+    depends_on:
+      - free5gc-amf
+      - free5gc-smf
+      - free5gc-upf
+
+  free5gc-webui:
+    container_name: webui
+    image: free5gc/webui:v3.4.2
+    command: ./webui -c ./config/webuicfg.yaml
+    expose:
+      - "2121"
+    volumes:
+      - ./config/webuicfg.yaml:/free5gc/config/webuicfg.yaml
+    environment:
+      - GIN_MODE=release
+    networks:
+      privnet:
+        aliases:
+          - webui
     ports:
-      - "0.0.0.0:9999:9999/tcp"
+      - "5000:5000"
+      - "2122:2122"
+      - "2121:2121"
+    depends_on:
+      - db
+      - free5gc-nrf
+
+  ueransim:
+    container_name: ueransim
+    image: free5gc/ueransim:latest
+    command: ./nr-gnb -c ./config/gnbcfg.yaml
+    volumes:
+      - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
+      - ./config/uecfg.yaml:/ueransim/config/uecfg.yaml
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - "/dev/net/tun"
+    networks:
+      privnet:
+        aliases:
+          - gnb.samcom
+    depends_on:
+      - free5gc-amf
+      - free5gc-upf
+
+  n3iwue:
+    container_name: n3iwue
+    image: free5gc/n3iwue:latest
+    command: sleep infinity
+    volumes:
+      - ./config/n3uecfg.yaml:/n3iwue/config/n3ue.yaml
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - "/dev/net/tun"
+    networks:
+      privnet:
+        aliases:
+          - n3ue.samcom
+    depends_on:
+      - free5gc-n3iwf
 
 networks:
-  open5gs:
-    name: open5gs
-    driver: bridge
-    driver_opts:
-      com.docker.network.bridge.name: br-ogs
+  privnet:
     ipam:
+      driver: default
       config:
-        - subnet: 10.33.33.0/24
-
-volumes:
-  db_data:
-    name: open5gs_db_data
-    labels:
-      mongodb_version: ${MONGODB_VERSION}
-  db_config:
-    name: open5gs_db_config
-    labels:
-      mongodb_version: ${MONGODB_VERSION}
-
-configs:
-  nrf_config:
-    file: ./configs/nrf.yaml
-  ausf_config:
-    file: ./configs/ausf.yaml
-  udm_config:
-    file: ./configs/udm.yaml
-  udr_config:
-    file: ./configs/udr.yaml
-  nssf_config:
-    file: ./configs/nssf.yaml
-  bsf_config:
-    file: ./configs/bsf.yaml
-  pcf_config:
-    file: ./configs/pcf.yaml
-  amf_config:
-    file: ./configs/amf.yaml
-  smf_config:
-    file: ./configs/smf.yaml
-  upf_config:
-    file: ./configs/upf.yaml
+        - subnet: 10.100.200.0/24
+    driver_opts:
+      com.docker.network.bridge.name: br-free5gc
