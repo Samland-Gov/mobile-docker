@@ -53,6 +53,7 @@ services:
     command: ./amf -c ./config/amfcfg.yaml
     expose:
       - "8000"
+      - "38412"
     volumes:
       - ./config/amfcfg.yaml:/free5gc/config/amfcfg.yaml
       - ./cert:/free5gc/cert
@@ -246,8 +247,6 @@ services:
     container_name: ueransim
     image: free5gc/ueransim:latest
     command: ./nr-gnb -c ./config/gnbcfg.yaml
-    expose:
-      - "38412"
     volumes:
       - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
       - ./config/uecfg.yaml:/ueransim/config/uecfg.yaml
@@ -259,8 +258,6 @@ services:
       privnet:
         aliases:
           - gnb.samcom
-    ports:
-      - "38412:38412"
     depends_on:
       - free5gc-amf
       - free5gc-upf
