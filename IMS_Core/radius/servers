@@ -1,4 +1,0 @@
-# /etc/radiusclient-ng/servers
-
-# FORMAT:   <IP or hostname>    <shared_secret>
-172.18.0.3      your_shared_secret
