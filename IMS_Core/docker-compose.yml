@@ -4,17 +4,7 @@ services:
   kamailio:
     build: ./kamailio
     container_name: kamailio
-    networks:
-      radius_net:
-        ipv4_address: 172.20.0.2
     ports:
       - "5060:5060/tcp"
       - "5060:5060/udp"
     restart: unless-stopped
-
-networks:
-  radius_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
