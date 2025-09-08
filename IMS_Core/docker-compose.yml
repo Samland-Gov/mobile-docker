@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  freeradius:
+    image: freeradius/freeradius-server:latest
+    container_name: freeradius
+    networks:
+      radius_net:
+        ipv4_address: 172.18.0.3
+    volumes:
+      - ./radius/clients.conf:/etc/freeradius/3.0/clients.conf:ro
+      - ./radius/users:/etc/freeradius/3.0/mods-config/files/authorize:ro
+      - ./radius/sites-available/default:/etc/freeradius/3.0/sites-available/default:ro
+    ports:
+      - "1812:1812/udp"   # RADIUS authentication port
+      - "1813:1813/udp"   # RADIUS accounting port (if you use it)
+
+  kamailio:
+    build: ./kamailio
+    container_name: kamailio
+    depends_on:
+      - freeradius
+    networks:
+      radius_net:
+        ipv4_address: 172.18.0.2
+    ports:
+      - "5060:5060/tcp"
+      - "5060:5060/udp"
+    restart: unless-stopped
+
+networks:
+  radius_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
