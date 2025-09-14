@@ -8,10 +8,10 @@ hss:
   bind_port: 3868
 
   #Value to populate as the OriginHost in Diameter responses
-  OriginHost: "template_HSS_HOSTNAME.template_EPC_DOMAIN"
+  OriginHost: "hss.mnc001.mcc001.3gppnetwork.org"
 
   #Value to populate as the OriginRealm in Diameter responses
-  OriginRealm: "template_EPC_DOMAIN"
+  OriginRealm: "epc.mnc001.mcc001.3gppnetwork.org"
 
   #Value to populate as the Product name in Diameter responses
   ProductName: "Samcom HSS"
@@ -58,12 +58,12 @@ logging:
 #Multiple database types are supported, and additional database can be added easily.
 #See ``databases.md`` for information on connecting to your database of choice, with your preferred schema.
 database:
-  Mongo:
-    server: mongodb
-    username: root
-    password: example
-    database: db
-    port: 27017
+  dbtype: mongodb
+  server: mongodb
+  username: root
+  password: example
+  database: db
+  port: 27017
 
 ## Stats Parameters
 redis:
