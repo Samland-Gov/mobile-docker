@@ -58,7 +58,7 @@ logging:
 #Multiple database types are supported, and additional database can be added easily.
 #See ``databases.md`` for information on connecting to your database of choice, with your preferred schema.
 database:
-  MongoDB:
+  Mongo:
     server: mongodb
     username: root
     password: example
