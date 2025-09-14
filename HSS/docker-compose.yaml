@@ -1,6 +1,6 @@
 services:
   pyhss:
-    image: pyhss
+    build: .
     container_name: pyhss
     volumes:
       - ./config.yaml:/pyhss/config.yaml
