@@ -28,13 +28,14 @@ services:
       - db
 
   db:
-    container_name: mongodb
-    image: mongo
-    command: mongod --port 27017
-    expose:
-      - "27017"
-    volumes:
-      - /mnt/server-storage/mobile/hss_db:/data/db
+    container_name: mariadb
+    image: mariadb:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: hss_db
+      MYSQL_USER: hss_user
+      MYSQL_PASSWORD: hss_pass
+    volumes:
+      - /mnt/server-storage/mobile/hss_db:/var/lib/mysql
+    ports:
+      - "3306:3306"
