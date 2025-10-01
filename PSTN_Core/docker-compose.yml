@@ -1,10 +1,13 @@
-version: "3.8"
-
 services:
-  kamailio:
-    build: ./kamailio
-    container_name: kamailio
-    ports:
-      - "5060:5060/tcp"
-      - "5060:5060/udp"
+  routr:
+    image: fonoster/routr-one:latest
     restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      EXTERNAL_ADDRS: ${DOCKER_HOST_ADDRESS}
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - 51908:51908
+      - 5060:5060/udp
+      - 5060:5060/tcp
