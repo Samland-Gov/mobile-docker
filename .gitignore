@@ -1,2 +1,3 @@
 ./dbdata
 .env
+./hss/config.yaml

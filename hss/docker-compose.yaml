@@ -5,37 +5,7 @@ services:
     volumes:
       - ./config.yaml:/pyhss/config.yaml
     ports:
-      - "8180:8080" # REST API  
+      - "8180:8080" # REST API
       - "3868:3868" # Diameter
     depends_on:
       - db
-
-  free5gc-webui:
-    container_name: webui
-    image: free5gc/webui:v3.4.2
-    command: ./webui -c ./config/webuicfg.yaml
-    expose:
-      - "2121"
-    volumes:
-      - ./webuicfg.yaml:/free5gc/config/webuicfg.yaml
-    environment:
-      - GIN_MODE=release
-    ports:
-      - "5000:5000"
-      - "2122:2122"
-      - "2121:2121"
-    depends_on:
-      - db
-
-  db:
-    container_name: mariadb
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: hss_db
-      MYSQL_USER: hss_user
-      MYSQL_PASSWORD: hss_pass
-    volumes:
-      - /mnt/server-storage/mobile/hss_db:/var/lib/mysql
-    ports:
-      - "3306:3306"
