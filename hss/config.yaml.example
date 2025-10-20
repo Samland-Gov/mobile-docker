@@ -67,12 +67,16 @@ database:
 
 ## Stats Parameters
 redis:
-  enabled: False
+  enabled: True
   clear_stats_on_boot: True
-  host: localhost
+  host: redis
   port: 6379
 
 
 snmp:
   port: 1161
   listen_address: 127.0.0.1
+
+## API Parameters
+api:
+  page_size: 100 # required as pyhss attemps to lookup a none-existent default value for this.

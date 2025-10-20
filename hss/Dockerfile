@@ -52,6 +52,7 @@ RUN git checkout DockerFixes
 
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r /pyhss/requirements.txt
+RUN pip install psycopg2-binary
 
 WORKDIR /pyhss/services
 
