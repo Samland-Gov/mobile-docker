@@ -22,5 +22,68 @@ services:
     networks:
       - mobile-net
 
+  icscf:
+    build:
+      context: ./ims
+      target: icscf
+      args:
+        KAMAILIO_VERSION: 5.7.4
+    container_name: icscf
+    depends_on:
+      - hss
+    ports:
+      - "5060:5060/udp"
+      - "5060:5060/tcp"
+      - "5062:5062/udp"
+      - "5062:5062/tcp"
+    environment:
+      - KAMAILIO_LOG_LEVEL=3
+    networks:
+      mobile-net:
+        aliases:
+          - icscf.mnc001.mcc001.3gppnetwork.org
+
+  pcscf:
+    build:
+      context: ./ims
+      target: pcscf
+      args:
+        KAMAILIO_VERSION: 5.7.4
+    container_name: pcscf
+    depends_on:
+      - hss
+    ports:
+      - "5160:5060/udp"
+      - "5160:5060/tcp"
+      - "5162:5062/udp"
+      - "5162:5062/tcp"
+    environment:
+      - KAMAILIO_LOG_LEVEL=3
+    networks:
+      mobile-net:
+        aliases:
+          - pcscf.mnc001.mcc001.3gppnetwork.org
+
+  scscf:
+    build:
+      context: ./ims
+      target: scscf
+      args:
+        KAMAILIO_VERSION: 5.7.4
+    container_name: scscf
+    depends_on:
+      - hss
+    ports:
+      - "5260:5060/udp"
+      - "5260:5060/tcp"
+      - "5262:5062/udp"
+      - "5262:5062/tcp"
+    environment:
+      - KAMAILIO_LOG_LEVEL=3
+    networks:
+      mobile-net:
+        aliases:
+          - scscf.mnc001.mcc001.3gppnetwork.org
+
 networks:
   mobile-net:

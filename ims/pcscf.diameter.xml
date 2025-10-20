@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiameterConfiguration>
+  <LocalPeer
+      identity="pcscf.mnc001.mcc001.3gppnetwork.org"
+      realm="ims.mnc001.mcc001.3gppnetwork.org"
+      port="3868"
+      transport="tcp"
+      vendor-id="0"
+      product-name="Kamailio-PCSCF"
+      watchdog-timer="30" />
+  <Peers>
+    <Peer
+        identity="hss.mnc001.mcc001.3gppnetwork.org"
+        realm="epc.mnc001.mcc001.3gppnetwork.org"
+        port="3868"
+        transport="tcp"
+        persist="yes" />
+  </Peers>
+  <Applications>
+    <Auth application-id="16777216" vendor-id="10415" />
+  </Applications>
+</DiameterConfiguration>
